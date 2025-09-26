@@ -8,34 +8,54 @@ public final class SimpleProduct implements Product {
     private final String id;
     private final String name;
     private final Money basePrice;
+
     public SimpleProduct(String id, String name, Money basePrice) {
-        if (id == null || id.isBlank()) throw new IllegalArgumentException("id required");
-        if (name == null || name.isBlank()) throw new IllegalArgumentException("name required");
-        if (basePrice == null) throw new IllegalArgumentException("basePrice required");
-        // Money already enforces non-negative
-        this.id = id;
-        this.name = name;
-        this.basePrice = basePrice;
+      if (id != null && !id.isBlank()) {
+         if (name != null && !name.isBlank()) {
+            if (basePrice != null && basePrice.asBigDecimal().signum() >= 0) {
+               this.id = id;
+               this.name = name;
+               this.basePrice = basePrice;
+            } else {
+               throw new IllegalArgumentException("basePrice >= 0 required");
+            }
+         } else {
+            throw new IllegalArgumentException("name required");
+         }
+      } else {
+         throw new IllegalArgumentException("id required");
+      }
+   }
+    public String id() {
+        return this.id;
     }
-    @Override public String id() { return id; }
-    @Override public String name() { return name; }
-    @Override public Money basePrice() { return basePrice; }
-    @Override
+    public String name() {
+        return this.name;
+    }
+    public Money basePrice() {
+        return this.basePrice;
+    }
+    
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SimpleProduct)) return false;
-        SimpleProduct that = (SimpleProduct) o;
-        return id.equals(that.id) && name.equals(that.name) && basePrice.equals(that.basePrice);
+        if (this == o) {
+            return true;
+        }
+        else if (o instanceof SimpleProduct) {
+            SimpleProduct p = (SimpleProduct) o;
+            return this.id.equals(p.id);
+        }else{
+            return false;
+        }
+        
     }
 
-    @Override
     public int hashCode() {
-        return Objects.hash(id, name, basePrice);
+        return Objects.hash(new Object[]{this.id});
     }
 
-    @Override
     public String toString() {
-        return id + ":" + name + "@" + basePrice;
+     String varString = this.name;
+      return varString + " (€" + String.valueOf(this.basePrice) + ")";
     }
 
 }
