@@ -1,6 +1,8 @@
 package com.cafepos.order;
 
 import com.cafepos.common.Money;
+import com.cafepos.payment.PaymentStrategy;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,4 +47,12 @@ public final class Order {
    public Money totalWithTax(int percent) {
       return this.subtotal().add(this.taxAtPercent(percent));
    }
+
+    public void pay(PaymentStrategy strategy) {
+        if (strategy == null) throw new
+                IllegalArgumentException("strategy required");
+        strategy.pay(this);
+    }
+
+
 }

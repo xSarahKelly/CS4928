@@ -1,2 +1,15 @@
-C:\Users\Sarah\Year 4\CS4928\Labs\cafe-pos-week2\src\main\java\com\cafepos\Main.java
-C:\Users\Sarah\Year 4\CS4928\Labs\cafe-pos-week2\src\main\java\com\cafepos\Money.java
+C:\Users\Sarah\Year 4\CS4928\CS4928\cafe-pos-week2\src\main\java\com\cafepos\order\LineItem.java
+C:\Users\Sarah\Year 4\CS4928\CS4928\cafe-pos-week2\src\main\java\com\cafepos\demo\Week3Demo.java
+C:\Users\Sarah\Year 4\CS4928\CS4928\cafe-pos-week2\src\main\java\com\cafepos\common\Money.java
+C:\Users\Sarah\Year 4\CS4928\CS4928\cafe-pos-week2\src\main\java\com\cafepos\payment\CashPayment.java
+C:\Users\Sarah\Year 4\CS4928\CS4928\cafe-pos-week2\src\main\java\com\cafepos\order\OrderIds.java
+C:\Users\Sarah\Year 4\CS4928\CS4928\cafe-pos-week2\src\main\java\com\cafepos\catalog\Catalog.java
+C:\Users\Sarah\Year 4\CS4928\CS4928\cafe-pos-week2\src\main\java\com\cafepos\payment\WalletPayment.java
+C:\Users\Sarah\Year 4\CS4928\CS4928\cafe-pos-week2\src\main\java\com\cafepos\catalog\SimpleProduct.java
+C:\Users\Sarah\Year 4\CS4928\CS4928\cafe-pos-week2\src\main\java\com\cafepos\demo\Week2Demo.java
+C:\Users\Sarah\Year 4\CS4928\CS4928\cafe-pos-week2\src\main\java\com\cafepos\order\Order.java
+C:\Users\Sarah\Year 4\CS4928\CS4928\cafe-pos-week2\src\main\java\com\cafepos\catalog\Product.java
+C:\Users\Sarah\Year 4\CS4928\CS4928\cafe-pos-week2\src\main\java\com\cafepos\catalog\InMemoryCatalog.java
+C:\Users\Sarah\Year 4\CS4928\CS4928\cafe-pos-week2\src\main\java\com\cafepos\Main.java
+C:\Users\Sarah\Year 4\CS4928\CS4928\cafe-pos-week2\src\main\java\com\cafepos\payment\CardPayment.java
+C:\Users\Sarah\Year 4\CS4928\CS4928\cafe-pos-week2\src\main\java\com\cafepos\payment\PaymentStrategy.java
