@@ -1,14 +1,21 @@
 package com.cafepos.catalog;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 public final class InMemoryCatalog implements Catalog {
 private final Map<String, Product> byId = new HashMap<>();
-@Override public void add(Product p) {
-if (p == null) throw new
-IllegalArgumentException("product required");
-byId.put(p.id(), p);
+
+public void add(Product p) {
+if (p == null) {
+    throw new IllegalArgumentException("product required");
+} else {
+    this.byId.put(p.id(), p);
 }
-@Override public Optional<Product> findById(String id) {
-return Optional.ofNullable(byId.get(id));
+}
+
+public Optional<Product> findById(String id) {
+return Optional.ofNullable((Product)this.byId.get(id));
 }
 }
