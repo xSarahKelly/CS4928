@@ -16,7 +16,7 @@ public final class CardPayment implements PaymentStrategy {
             throw new IllegalArgumentException("Order cannot be null");
         }
         String maskedCard = maskCardNum(cardNumber);
-        System.out.println("[Card] Customer paid" + order.totalWithTax(10) + "EUR with card" + maskedCard);
+        System.out.println("[Card] Customer paid " + order.totalWithTax(10) + " EUR with card " + maskedCard);
     }
     private String maskCardNum(String cardNumber) {
         int length = cardNumber.length();
