@@ -11,7 +11,7 @@ public SizeLarge(Product base) {
 }
 @Override 
 public String name() { 
-    return base.name() + "(Large)"; }
+    return base.name() + " (Large)"; }
 @Override
 public Money price() {
     return (base instanceof Priced p ? p.price() : base.basePrice()).add(SURCHARGE);

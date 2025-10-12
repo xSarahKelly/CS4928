@@ -12,7 +12,7 @@ public ExtraShot(Product base) {
 
 @Override 
 public String name() { 
-    return base.name() + " + Extra Shot "; 
+    return base.name() + " + Extra Shot";
 }
 
 @Override

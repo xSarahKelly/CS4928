@@ -11,7 +11,7 @@ public OatMilk(Product base) {
 }
 @Override 
 public String name() { 
-    return base.name() + "+ Oat Milk"; 
+    return base.name() + " + Oat Milk";
 }
 @Override
 public Money price() {
