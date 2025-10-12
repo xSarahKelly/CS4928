@@ -1,10 +1,10 @@
 package com.cafepos.catalog;
 
 import java.util.Objects;
-
+import com.cafepos.order.Priced;
 import com.cafepos.common.Money;
 
-public final class SimpleProduct implements Product {
+public final class SimpleProduct implements Product, Priced {
     private final String id;
     private final String name;
     private final Money basePrice;
@@ -33,6 +33,11 @@ public final class SimpleProduct implements Product {
         return this.name;
     }
     public Money basePrice() {
+        return this.basePrice;
+    }
+
+    @Override
+    public Money price() {
         return this.basePrice;
     }
     
