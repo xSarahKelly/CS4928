@@ -45,4 +45,11 @@ public final class Money implements Comparable<Money> {
     @Override public int hashCode() { return Objects.hash(amount); }
 
     @Override public String toString() { return amount.toPlainString(); }
+    public boolean isLessThan(Money other) {
+        return this.compareTo(other) < 0;
+    }
+    public Money minus(Money other) {
+        if (other == null) throw new IllegalArgumentException("other required");
+        return new Money(this.amount.subtract(other.amount));
+    }
 }
