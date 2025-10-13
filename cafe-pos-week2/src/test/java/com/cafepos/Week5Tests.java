@@ -9,6 +9,7 @@ import com.cafepos.decorator.SizeLarge;
 import com.cafepos.factory.ProductFactory;
 import com.cafepos.order.LineItem;
 import com.cafepos.order.Order;
+import com.cafepos.order.OrderIds;
 import com.cafepos.order.Priced;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -47,5 +48,43 @@ public class Week5Tests {
         Order o = new Order(1);
         o.addItem(new LineItem(withShot, 2));
         assertEquals(Money.of(6.60), o.subtotal());
+    }
+
+    //activity
+    @Test
+    void factoryAndManualBuildShouldBeEquivalent() {
+        // 1Build drink via factory
+        Product viaFactory = new ProductFactory().create("ESP+SHOT+OAT+L");
+
+        // 2️Build same drink manually via decorators
+        Product viaManual = new SizeLarge(
+                new OatMilk(
+                        new ExtraShot(
+                                new SimpleProduct("P-ESP", "Espresso", Money.of(2.50))
+                        )
+                )
+        );
+
+        // 3️Compare names
+        assertEquals(viaManual.name(), viaFactory.name(),
+                "Factory and manually built drink names should match");
+
+        // 4️If using Priced interface, compare unit prices
+        if (viaFactory instanceof Priced f && viaManual instanceof Priced m) {
+            assertEquals(f.price(), m.price(),
+                    "Factory and manually built drink prices should match");
+        }
+
+        // 5️Compare order subtotals and totals
+        Order orderFactory = new Order(OrderIds.next());
+        orderFactory.addItem(new LineItem(viaFactory, 1));
+
+        Order orderManual = new Order(OrderIds.next());
+        orderManual.addItem(new LineItem(viaManual, 1));
+
+        assertEquals(orderManual.subtotal(), orderFactory.subtotal(),
+                "Subtotals should match for factory and manual drinks");
+        assertEquals(orderManual.totalWithTax(10), orderFactory.totalWithTax(10),
+                "Totals with tax should match for factory and manual drinks");
     }
 }
