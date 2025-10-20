@@ -4,16 +4,20 @@ import com.cafepos.factory.ProductFactory;
 import com.cafepos.catalog.Product;
 
 
+//God Class (Bloater) (does too much)
 public class OrderManagerGod {
 
     public static int TAX_PERCENT = 10;  //Global/Static State and Primitive Obsession
     public static String LAST_DISCOUNT_CODE = null; //Global/Static State
 
+    //Long method and too many responsibilities (creation, pricing, discount, tax, payment I/O, printing)
     public static String process(String recipe, int qty, String paymentType, String discountCode, boolean printReceipt) {
 
+        // Feature Envy / Shotgun Surgery: creation logic here so product rule changes require edita
         ProductFactory factory = new ProductFactory();
         Product product = factory.create(recipe);
 
+        // Duplicated Logic: price resolution & exception fallback scattered inline.
         Money unitPrice;
         try {
 
@@ -24,12 +28,17 @@ public class OrderManagerGod {
         }
         if (qty <= 0) qty = 1;
 
+        // Duplicated Logic: Money/BigDecimal math scattered inline.
         Money subtotal = unitPrice.multiply(qty);
 
+        // Primitive Obsession: string protocol for discountCode and magic numbers for rates.
+        // Feature Envy / Shotgun Surgery: discount rules embedded inline so adding a rule requires editing
         Money discount = Money.zero();
 
         if (discountCode != null) { // Primitive Obsession (string presence controls logic)
             if (discountCode.equalsIgnoreCase("LOYAL5")) {// Primitive Obsession
+                // Duplicated Logic: repeated percentage maths, rounding policy implicit.
+                // Primitive Obsession: magic numbers 5 and 100
                 discount = Money.of(subtotal.asBigDecimal()
                         .multiply(java.math.BigDecimal.valueOf(5))
                         .divide(java.math.BigDecimal.valueOf(100)));
@@ -43,16 +52,21 @@ public class OrderManagerGod {
             LAST_DISCOUNT_CODE = discountCode; //Global/Static State: storing last code globally introduces hidden coupling.
         }
 
+        // Duplicated Logic: manual subtraction
         Money discounted = Money.of(subtotal.asBigDecimal().subtract(discount.asBigDecimal()));
         if (discounted.asBigDecimal().signum() < 0) discounted = Money.zero();
 
 
+        // Feature Envy / Shotgun Surgery: tax rule embedded inline so any rule change requires edits
+        // Primitive Obsession: TAX_PERCENT as primitive and magic number 100
+        // Duplicated Logic: repeated percentage maths and implicit rounding
         var tax = Money.of(discounted.asBigDecimal()
                 .multiply(java.math.BigDecimal.valueOf(TAX_PERCENT))
                 .divide(java.math.BigDecimal.valueOf(100)));
 
         var total = discounted.add(tax); // Duplicated Logic: repeated Money composition.
 
+        // Feature Envy / Shotgun Surgery: payment handling via string protocol and if/else chain (should be Strategy)
         if (paymentType != null) { // Primitive Obsession string
             if (paymentType.equalsIgnoreCase("CASH")) {
                 System.out.println("[Cash] Customer paid " + total + " EUR");
@@ -65,6 +79,7 @@ public class OrderManagerGod {
             }
         }
 
+        // Long Method & Duplicated Logic: mixes UI formatting with pricing, repeated values, should be extracted.
         StringBuilder receipt = new StringBuilder();
         receipt.append("Order (").append(recipe).append(") x").append(qty).append("\n");
                 receipt.append("Subtotal: ").append(subtotal).append("\n");
@@ -75,6 +90,7 @@ public class OrderManagerGod {
                 receipt.append("Total: ").append(total);
         String out = receipt.toString();
         if (printReceipt) {
+            // Long Method / Mixed Concerns: I/O side effect inside pricing flow
             System.out.println(out);
         }
         return out;
