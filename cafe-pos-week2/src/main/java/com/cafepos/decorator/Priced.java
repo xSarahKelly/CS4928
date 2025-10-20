@@ -1,4 +1,4 @@
-package com.cafepos.order;
+package com.cafepos.decorator;
 import com.cafepos.common.Money;
 
 public interface Priced {

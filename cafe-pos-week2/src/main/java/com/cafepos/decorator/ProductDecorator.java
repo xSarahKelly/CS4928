@@ -1,6 +1,7 @@
 package com.cafepos.decorator;
 import com.cafepos.catalog.Product;
 import com.cafepos.common.Money;
+
 public abstract class ProductDecorator implements Product {
 //wraps/contains another product interface
 protected final Product base;
