@@ -5,12 +5,13 @@ import com.cafepos.catalog.SimpleProduct;
 import com.cafepos.common.Money;
 import com.cafepos.decorator.ExtraShot;
 import com.cafepos.decorator.OatMilk;
+import com.cafepos.decorator.Priced;
 import com.cafepos.decorator.SizeLarge;
 import com.cafepos.factory.ProductFactory;
 import com.cafepos.order.LineItem;
 import com.cafepos.order.Order;
 import com.cafepos.order.OrderIds;
-import com.cafepos.order.Priced;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
