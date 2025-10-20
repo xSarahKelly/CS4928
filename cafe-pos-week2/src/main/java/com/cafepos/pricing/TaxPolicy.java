@@ -1,4 +1,7 @@
 package com.cafepos.pricing;
 
-public class TaxPolicy {
+import com.cafepos.common.Money;
+
+public interface TaxPolicy {
+    Money taxOn(Money amount);
 }
