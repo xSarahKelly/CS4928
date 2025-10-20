@@ -1,8 +1,9 @@
 package com.cafepos.catalog;
 
 import java.util.Objects;
-import com.cafepos.order.Priced;
+
 import com.cafepos.common.Money;
+import com.cafepos.decorator.Priced;
 
 public final class SimpleProduct implements Product, Priced {
     private final String id;
