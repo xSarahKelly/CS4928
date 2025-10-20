@@ -7,12 +7,11 @@ import com.cafepos.catalog.Product;
 //God Class (Bloater) (does too much)
 public class OrderManagerGod {
 
-    public static int TAX_PERCENT = 10;  //Global/Static State and Primitive Obsession
-    public static String LAST_DISCOUNT_CODE = null; //Global/Static State
 
     //Long method and too many responsibilities (creation, pricing, discount, tax, payment I/O, printing)
     public static String process(String recipe, int qty, String paymentType, String discountCode, boolean printReceipt) {
 
+        final int taxPercent = 10; 
         // Feature Envy / Shotgun Surgery: creation logic here so product rule changes require edita
         ProductFactory factory = new ProductFactory();
         Product product = factory.create(recipe);
@@ -49,7 +48,7 @@ public class OrderManagerGod {
             } else {
                 discount = Money.zero();
             }
-            LAST_DISCOUNT_CODE = discountCode; //Global/Static State: storing last code globally introduces hidden coupling.
+
         }
 
         // Duplicated Logic: manual subtraction
@@ -61,7 +60,7 @@ public class OrderManagerGod {
         // Primitive Obsession: TAX_PERCENT as primitive and magic number 100
         // Duplicated Logic: repeated percentage maths and implicit rounding
         var tax = Money.of(discounted.asBigDecimal()
-                .multiply(java.math.BigDecimal.valueOf(TAX_PERCENT))
+                .multiply(java.math.BigDecimal.valueOf(taxPercent))
                 .divide(java.math.BigDecimal.valueOf(100)));
 
         var total = discounted.add(tax); // Duplicated Logic: repeated Money composition.
@@ -86,7 +85,7 @@ public class OrderManagerGod {
         if (discount.asBigDecimal().signum() > 0) {
             receipt.append("Discount: -").append(discount).append("\n");
         }
-        receipt.append("Tax (").append(TAX_PERCENT).append("%): ").append(tax).append("\n");
+        receipt.append("Tax (").append(taxPercent).append("%): ").append(tax).append("\n");
                 receipt.append("Total: ").append(total);
         String out = receipt.toString();
         if (printReceipt) {
