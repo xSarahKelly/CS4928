@@ -3,6 +3,9 @@ package com.cafepos.demo;
 import com.cafepos.catalog.Product;
 import com.cafepos.common.Money;
 import com.cafepos.factory.ProductFactory;
+import com.cafepos.order.CustomerNotifier;
+import com.cafepos.order.DeliveryDesk;
+import com.cafepos.order.KitchenDisplay;
 import com.cafepos.order.LineItem;
 import com.cafepos.order.Order;
 import com.cafepos.order.OrderIds;
@@ -26,6 +29,8 @@ public final class Week6Demo {
         Scanner scanner = new Scanner(System.in);
         ProductFactory factory = new ProductFactory();
         boolean running = true;
+         
+        
 
         while (running) {
             System.out.println("=== Café POS - Week 6 Demo ===");
@@ -86,7 +91,11 @@ public final class Week6Demo {
             Product product = factory.create(code);
 
             Order order = new Order(OrderIds.next());
+            order.register(new KitchenDisplay());
+        order.register(new DeliveryDesk());
+        order.register(new CustomerNotifier());
             order.addItem(new LineItem(product, 1));
+            
 
             // === Ask for loyalty/discount code BEFORE payment ===
             System.out.println("\nDo you have a discount or loyalty code? (e.g. LOYAL5) Enter code or NONE:");
