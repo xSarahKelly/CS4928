@@ -12,12 +12,12 @@ import com.cafepos.order.OrderIds;
 import com.cafepos.payment.CardPayment;
 import com.cafepos.payment.CashPayment;
 import com.cafepos.payment.WalletPayment;
-import com.cafepos.pricing.LoyaltyPercentDiscount;
-import com.cafepos.pricing.FixedRateTaxPolicy;
-import com.cafepos.pricing.PricingService;
-import com.cafepos.pricing.ReceiptPrinter;
 import com.cafepos.smells.OrderManagerGod;
 import com.cafepos.checkout.CheckoutService;
+import com.cafepos.checkout.FixedRateTaxPolicy;
+import com.cafepos.checkout.LoyaltyPercentDiscount;
+import com.cafepos.checkout.PricingService;
+import com.cafepos.checkout.ReceiptPrinter;
 
 import java.util.ArrayList;
 import java.util.List;
