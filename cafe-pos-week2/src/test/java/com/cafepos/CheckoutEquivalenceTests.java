@@ -1,9 +1,9 @@
 // src/test/java/com/cafepos/CheckoutEquivalenceTests.java
 package com.cafepos;
 
-import com.cafepos.checkout.CheckoutService;
+import com.cafepos.checkout.*;
 import com.cafepos.factory.ProductFactory;
-import com.cafepos.pricing.*;
+
 import com.cafepos.common.Money;
 import com.cafepos.smells.OrderManagerGod;
 import org.junit.jupiter.api.Test;

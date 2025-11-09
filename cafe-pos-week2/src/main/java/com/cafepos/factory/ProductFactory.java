@@ -8,7 +8,7 @@ public final class ProductFactory {
         if (recipe == null || recipe.isBlank())
             throw new IllegalArgumentException("recipe required");
 
-        String[] raw = recipe.split("\\+"); // literal '+'
+        String[] raw = recipe.split("\\+");
         String[] parts = java.util.Arrays.stream(raw)
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())    //drop empty tokens
