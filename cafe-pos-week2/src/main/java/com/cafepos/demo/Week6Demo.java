@@ -1,23 +1,23 @@
 package com.cafepos.demo;
 
+import com.cafepos.application.CheckoutService;
+import com.cafepos.application.ReceiptFormatter;
 import com.cafepos.catalog.Product;
-import com.cafepos.common.Money;
-import com.cafepos.factory.ProductFactory;
+import com.cafepos.domain.LineItem;
+import com.cafepos.domain.Order;
+import com.cafepos.domain.common.Money;
+import com.cafepos.domain.factory.ProductFactory;
+import com.cafepos.domain.pricing.FixedRateTaxPolicy;
+import com.cafepos.domain.pricing.LoyaltyPercentDiscount;
+import com.cafepos.domain.pricing.PricingService;
 import com.cafepos.order.CustomerNotifier;
 import com.cafepos.order.DeliveryDesk;
 import com.cafepos.order.KitchenDisplay;
-import com.cafepos.order.LineItem;
-import com.cafepos.order.Order;
 import com.cafepos.order.OrderIds;
 import com.cafepos.payment.CardPayment;
 import com.cafepos.payment.CashPayment;
 import com.cafepos.payment.WalletPayment;
 import com.cafepos.smells.OrderManagerGod;
-import com.cafepos.checkout.CheckoutService;
-import com.cafepos.checkout.FixedRateTaxPolicy;
-import com.cafepos.checkout.LoyaltyPercentDiscount;
-import com.cafepos.checkout.PricingService;
-import com.cafepos.checkout.ReceiptPrinter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,14 +111,14 @@ public final class Week6Demo {
                     new LoyaltyPercentDiscount(loyaltyPercent),
                     new FixedRateTaxPolicy(taxRate)
             );
-            var printer = new ReceiptPrinter();
+            var printer = new ReceiptFormatter();
             var checkout = new CheckoutService(factory, pricing, printer, taxRate);
 
             // === Order summary using PricingService ===
             System.out.println("\nOrder summary:");
             printOrder(order);
 
-            String previewReceipt = checkout.checkout(code, 1);
+            String previewReceipt = checkout.checkout(order.id(), taxRate);
             printSummaryFromReceipt(previewReceipt);
 
             // === Payment options ===
@@ -166,7 +166,7 @@ public final class Week6Demo {
                     loyaltyCode.isEmpty() ? "NONE" : loyaltyCode, true
             );
 
-            String newReceipt = checkout.checkout(code, 1);
+            String newReceipt = checkout.checkout(order.id(), 1);
 
             System.out.println("\n--- Old Receipt ---\n" + oldReceipt);
             System.out.println("\n--- New Receipt ---\n" + newReceipt);

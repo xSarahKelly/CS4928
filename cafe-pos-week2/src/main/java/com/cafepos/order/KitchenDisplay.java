@@ -1,5 +1,7 @@
 package com.cafepos.order;
 
+import com.cafepos.domain.Order;
+
 public final class KitchenDisplay implements OrderObserver {
 @Override
 public void updated(Order order, String eventType) {

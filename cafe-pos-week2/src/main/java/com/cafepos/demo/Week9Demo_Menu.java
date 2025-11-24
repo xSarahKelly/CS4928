@@ -1,8 +1,8 @@
 package com.cafepos.demo;
 
-import com.cafepos.common.Money;
 import com.cafepos.decorator.Priced;
-import com.cafepos.factory.ProductFactory;
+import com.cafepos.domain.common.Money;
+import com.cafepos.domain.factory.ProductFactory;
 import com.cafepos.menu.Menu;
 import com.cafepos.menu.MenuItem;
 

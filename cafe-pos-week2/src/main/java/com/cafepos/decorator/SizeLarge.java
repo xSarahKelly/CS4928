@@ -1,6 +1,6 @@
 package com.cafepos.decorator;
 import com.cafepos.catalog.Product;
-import com.cafepos.common.Money;
+import com.cafepos.domain.common.Money;
 
 public final class SizeLarge extends ProductDecorator implements Priced {
 private static final Money SURCHARGE = Money.of(0.70);

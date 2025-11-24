@@ -1,7 +1,8 @@
 package com.cafepos.menu;
-import com.cafepos.common.Money;
 import java.util.Collections;
 import java.util.Iterator;
+
+import com.cafepos.domain.common.Money;
 public final class MenuItem extends MenuComponent {
     private final String name;
     private final Money price;

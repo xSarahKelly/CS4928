@@ -1,6 +1,6 @@
 package com.cafepos.smells;
-import com.cafepos.common.Money;
-import com.cafepos.factory.ProductFactory;
+import com.cafepos.domain.common.Money;
+import com.cafepos.domain.factory.ProductFactory;
 import com.cafepos.catalog.Product;
 
 

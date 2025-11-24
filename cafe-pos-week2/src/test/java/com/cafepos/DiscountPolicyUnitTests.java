@@ -1,9 +1,10 @@
 package com.cafepos;
 
-import com.cafepos.common.Money;
-import com.cafepos.pricing.FixedCouponDiscount;
-import com.cafepos.pricing.LoyaltyPercentDiscount;
-import com.cafepos.pricing.NoDiscount;
+import com.cafepos.domain.common.Money;
+import com.cafepos.domain.pricing.FixedCouponDiscount;
+import com.cafepos.domain.pricing.LoyaltyPercentDiscount;
+import com.cafepos.domain.pricing.NoDiscount;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

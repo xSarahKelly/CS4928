@@ -1,7 +1,7 @@
 package com.cafepos.payment;
 
-import com.cafepos.order.Order;
-import com.cafepos.common.Money;
+import com.cafepos.domain.Order;
+import com.cafepos.domain.common.Money;
 
 public final class CashPayment implements PaymentStrategy {
     private final Money amountGiven;

@@ -1,6 +1,6 @@
 package com.cafepos.decorator;
 import com.cafepos.catalog.Product;
-import com.cafepos.common.Money;
+import com.cafepos.domain.common.Money;
 
 public final class ExtraShot extends ProductDecorator implements Priced {
 

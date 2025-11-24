@@ -1,6 +1,6 @@
 package com.cafepos.decorator;
 import com.cafepos.catalog.Product;
-import com.cafepos.common.Money;
+import com.cafepos.domain.common.Money;
 
 
 public final class Syrup extends ProductDecorator implements Priced {

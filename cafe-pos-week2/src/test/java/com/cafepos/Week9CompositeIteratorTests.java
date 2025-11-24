@@ -1,6 +1,6 @@
 package com.cafepos;
 
-import com.cafepos.common.Money;
+import com.cafepos.domain.common.Money;
 import com.cafepos.menu.Menu;
 import com.cafepos.menu.MenuComponent;
 import com.cafepos.menu.MenuItem;

@@ -1,19 +1,19 @@
 package com.cafepos.demo;
 
+import com.cafepos.application.CheckoutService;
+import com.cafepos.application.ReceiptFormatter;
 import com.cafepos.catalog.Product;
-import com.cafepos.common.Money;
-import com.cafepos.factory.ProductFactory;
-import com.cafepos.order.LineItem;
-import com.cafepos.order.Order;
+import com.cafepos.domain.LineItem;
+import com.cafepos.domain.Order;
+import com.cafepos.domain.common.Money;
+import com.cafepos.domain.factory.ProductFactory;
+import com.cafepos.domain.pricing.FixedRateTaxPolicy;
+import com.cafepos.domain.pricing.LoyaltyPercentDiscount;
+import com.cafepos.domain.pricing.PricingService;
 import com.cafepos.order.OrderIds;
 import com.cafepos.payment.CardPayment;
 import com.cafepos.payment.CashPayment;
 import com.cafepos.payment.WalletPayment;
-import com.cafepos.checkout.CheckoutService;
-import com.cafepos.checkout.FixedRateTaxPolicy;
-import com.cafepos.checkout.LoyaltyPercentDiscount;
-import com.cafepos.checkout.PricingService;
-import com.cafepos.checkout.ReceiptPrinter;
 import com.cafepos.command.AddItemCommand;
 import com.cafepos.command.OrderService;
 import com.cafepos.command.PayOrderCommand;
@@ -145,7 +145,7 @@ public final class Week8Demo_Commands {
                     new LoyaltyPercentDiscount(loyaltyPercent),
                     new FixedRateTaxPolicy(taxRate)
             );
-            var printer = new ReceiptPrinter();
+            var printer = new ReceiptFormatter();
             var checkout = new CheckoutService(factory, pricing, printer, taxRate);
 
             // Order summary (current items)
