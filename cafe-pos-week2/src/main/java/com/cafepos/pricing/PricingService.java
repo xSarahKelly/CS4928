@@ -1,5 +1,7 @@
-package com.cafepos.checkout;
+package com.cafepos.pricing;
 
+import com.cafepos.pricing.DiscountPolicy;
+import com.cafepos.pricing.TaxPolicy;
 import com.cafepos.common.Money;
 
 public final class PricingService {

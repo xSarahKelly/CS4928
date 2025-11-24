@@ -2,10 +2,11 @@ package com.cafepos.checkout;
 
 import com.cafepos.catalog.Product;
 import com.cafepos.common.Money;
+import com.cafepos.domain.LineItem;
+import com.cafepos.domain.Order;
 import com.cafepos.factory.ProductFactory;
-import com.cafepos.order.LineItem;
-import com.cafepos.order.Order;
 import com.cafepos.payment.PaymentStrategy;
+import com.cafepos.pricing.PricingService;
 
 public final class CheckoutService {
     private final ProductFactory factory;

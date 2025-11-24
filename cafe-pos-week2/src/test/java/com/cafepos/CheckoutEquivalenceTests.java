@@ -3,7 +3,12 @@ package com.cafepos;
 
 import com.cafepos.checkout.*;
 import com.cafepos.factory.ProductFactory;
-
+import com.cafepos.pricing.PricingService;
+import com.cafepos.pricing.DiscountPolicy;
+import com.cafepos.pricing.FixedRateTaxPolicy;
+import com.cafepos.pricing.LoyaltyPercentDiscount;
+import com.cafepos.pricing.FixedCouponDiscount;
+import com.cafepos.pricing.NoDiscount;
 import com.cafepos.common.Money;
 import com.cafepos.smells.OrderManagerGod;
 import org.junit.jupiter.api.Test;

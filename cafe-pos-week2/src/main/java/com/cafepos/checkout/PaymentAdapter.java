@@ -1,8 +1,8 @@
 package com.cafepos.checkout;
 
+import com.cafepos.domain.LineItem;
+import com.cafepos.domain.Order;
 import com.cafepos.factory.ProductFactory;
-import com.cafepos.order.LineItem;
-import com.cafepos.order.Order;
 import com.cafepos.payment.PaymentStrategy;
 
 public final class PaymentAdapter {
