@@ -11,7 +11,7 @@ var controller = new OrderController(comp.repo(),
 comp.checkout());
 
 bus.on(OrderCreated.class, e -> System.out.println("[UI] order created: " + e.orderId()));
-bus.on(OrderPaid.class, e -> System.out.println("[UI] order paid:" + e.orderId()));
+bus.on(OrderPaid.class, e -> System.out.println("[UI] order paid: " + e.orderId()));
 
 long id = 4201L;
 controller.createOrder(id);

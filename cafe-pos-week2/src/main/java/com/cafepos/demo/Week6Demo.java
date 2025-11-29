@@ -5,6 +5,7 @@ import com.cafepos.common.Money;
 import com.cafepos.domain.LineItem;
 import com.cafepos.domain.Order;
 import com.cafepos.factory.ProductFactory;
+import com.cafepos.infra.Wiring;
 import com.cafepos.order.CustomerNotifier;
 import com.cafepos.order.DeliveryDesk;
 import com.cafepos.order.KitchenDisplay;
@@ -12,12 +13,7 @@ import com.cafepos.order.OrderIds;
 import com.cafepos.payment.CardPayment;
 import com.cafepos.payment.CashPayment;
 import com.cafepos.payment.WalletPayment;
-import com.cafepos.pricing.PricingService;
-import com.cafepos.smells.OrderManagerGod;
-import com.cafepos.checkout.CheckoutService;
-import com.cafepos.pricing.FixedRateTaxPolicy;
-import com.cafepos.pricing.LoyaltyPercentDiscount;
-import com.cafepos.checkout.ReceiptPrinter;
+import com.cafepos.ui.OrderController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +25,10 @@ public final class Week6Demo {
         Scanner scanner = new Scanner(System.in);
         ProductFactory factory = new ProductFactory();
         boolean running = true;
-         
-        
+
+        // Use layered architecture
+        var components = Wiring.createDefault();
+        var controller = new OrderController(components.repo(), components.checkout());
 
         while (running) {
             System.out.println("=== Café POS - Week 6 Demo ===");
@@ -70,15 +68,10 @@ public final class Week6Demo {
             Product largeVariant = factory.create(baseCode + "+L");
 
             Money basePrice = baseProduct.basePrice();
-            Money shotPrice = getPrice(shotVariant);
-            Money syrupPrice = getPrice(syrupVariant);
-            Money oatPrice = getPrice(oatVariant);
-            Money largePrice = getPrice(largeVariant);
-
-            Money shotSurcharge = shotPrice.minus(basePrice);
-            Money syrupSurcharge = syrupPrice.minus(basePrice);
-            Money oatSurcharge = oatPrice.minus(basePrice);
-            Money largeSurcharge = largePrice.minus(basePrice);
+            Money shotSurcharge = getPrice(shotVariant).minus(basePrice);
+            Money syrupSurcharge = getPrice(syrupVariant).minus(basePrice);
+            Money oatSurcharge = getPrice(oatVariant).minus(basePrice);
+            Money largeSurcharge = getPrice(largeVariant).minus(basePrice);
 
             List<String> decorators = new ArrayList<>();
             decorators.add(ask(scanner, "Add an extra shot? (y/n) (" + shotSurcharge + ")", "SHOT"));
@@ -88,38 +81,21 @@ public final class Week6Demo {
             decorators.removeIf(String::isEmpty);
 
             String code = baseCode + (decorators.isEmpty() ? "" : "+" + String.join("+", decorators));
-            Product product = factory.create(code);
 
-            Order order = new Order(OrderIds.next());
+            // Create order using layered architecture (MVC controller)
+            long orderId = OrderIds.next();
+            controller.createOrder(orderId);
+            controller.addItem(orderId, code, 1);
+
+            // Also create domain order for observer pattern demo
+            Order order = components.repo().findById(orderId).orElseThrow();
             order.register(new KitchenDisplay());
-        order.register(new DeliveryDesk());
-        order.register(new CustomerNotifier());
-            order.addItem(new LineItem(product, 1));
-            
+            order.register(new DeliveryDesk());
+            order.register(new CustomerNotifier());
 
-            // === Ask for loyalty/discount code BEFORE payment ===
-            System.out.println("\nDo you have a discount or loyalty code? (e.g. LOYAL5) Enter code or NONE:");
-            String loyaltyCode = scanner.nextLine().trim();
-            if (loyaltyCode.isEmpty() || loyaltyCode.equalsIgnoreCase("NONE")) {
-                loyaltyCode = "";
-            }
-            int loyaltyPercent = extractLoyaltyPercent(loyaltyCode);
-
-            // === PricingService setup (NEW behavior consistency) ===
-            int taxRate = 10;
-            var pricing = new PricingService(
-                    new LoyaltyPercentDiscount(loyaltyPercent),
-                    new FixedRateTaxPolicy(taxRate)
-            );
-            var printer = new ReceiptPrinter();
-            var checkout = new CheckoutService(factory, pricing, printer, taxRate);
-
-            // === Order summary using PricingService ===
+            // === Order summary ===
             System.out.println("\nOrder summary:");
             printOrder(order);
-
-            String previewReceipt = checkout.checkout(code, 1);
-            printSummaryFromReceipt(previewReceipt);
 
             // === Payment options ===
             System.out.println("\nHow would you like to pay?");
@@ -130,26 +106,22 @@ public final class Week6Demo {
             int payChoice = scanner.nextInt();
             scanner.nextLine();
 
-            String paymentType;
             switch (payChoice) {
                 case 1 -> {
                     System.out.println("Please provide cash (see total above).");
                     double cashProvided = scanner.nextDouble();
                     scanner.nextLine();
                     order.pay(new CashPayment(cashProvided));
-                    paymentType = "CASH";
                 }
                 case 2 -> {
                     System.out.println("Please enter your card number:");
                     String cardNumber = scanner.nextLine();
                     order.pay(new CardPayment(cardNumber));
-                    paymentType = "CARD";
                 }
                 case 3 -> {
                     System.out.println("Please enter your wallet ID:");
                     String walletId = scanner.nextLine();
                     order.pay(new WalletPayment(walletId));
-                    paymentType = "WALLET";
                 }
                 default -> {
                     System.out.println("Invalid payment type ):");
@@ -160,17 +132,11 @@ public final class Week6Demo {
             System.out.println("\nProcessing payment...");
             System.out.println("Payment complete. Thank you for your order!");
 
-            // === 30-second proof ===
-            String oldReceipt = OrderManagerGod.process(
-                    code, 1, paymentType,
-                    loyaltyCode.isEmpty() ? "NONE" : loyaltyCode, true
-            );
-
-            String newReceipt = checkout.checkout(code, 1);
-
-            System.out.println("\n--- Old Receipt ---\n" + oldReceipt);
-            System.out.println("\n--- New Receipt ---\n" + newReceipt);
-            System.out.println("\nMatch: " + oldReceipt.equals(newReceipt));
+            // Generate receipt using layered architecture
+            int taxRate = 10;
+            String receipt = controller.checkout(orderId, taxRate);
+            System.out.println("\n--- Receipt ---");
+            System.out.println(receipt);
 
             running = false; // Single demo proof
         }
@@ -196,34 +162,5 @@ public final class Week6Demo {
         for (LineItem li : order.items()) {
             System.out.println(" - " + li.product().name() + " x" + li.quantity() + " = " + li.lineTotal());
         }
-    }
-
-    /**
-     * Extracts subtotal, discount, tax, and total from receipt text
-     * generated by ReceiptPrinter to keep display consistent.
-     */
-    private static void printSummaryFromReceipt(String receiptText) {
-        System.out.println("\n--- Pricing Breakdown ---");
-        String[] lines = receiptText.split("\n");
-        for (String line : lines) {
-            if (line.contains("Subtotal") ||
-                line.contains("Discount") ||
-                line.contains("Tax") ||
-                line.contains("Total")) {
-                System.out.println(line);
-            }
-        }
-    }
-
-    private static int extractLoyaltyPercent(String loyaltyCode) {
-        if (loyaltyCode == null || loyaltyCode.isEmpty()) return 0;
-        String code = loyaltyCode.trim().toUpperCase();
-        if (code.startsWith("LOYAL")) {
-            try {
-                return Integer.parseInt(code.substring(5));
-            } catch (NumberFormatException ignored) {
-            }
-        }
-        return 0;
     }
 }

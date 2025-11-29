@@ -1,5 +1,5 @@
 package com.cafepos.demo;
-import com.cafepos.checkout.ReceiptPrinter;
+
 import com.cafepos.printing.*;
 import vendor.legacy.LegacyThermalPrinter;
 public final class Week8Demo_Adapter {

@@ -9,11 +9,6 @@ import com.cafepos.order.OrderIds;
 import com.cafepos.payment.CardPayment;
 import com.cafepos.payment.CashPayment;
 import com.cafepos.payment.WalletPayment;
-import com.cafepos.pricing.PricingService;
-import com.cafepos.checkout.CheckoutService;
-import com.cafepos.pricing.FixedRateTaxPolicy;
-import com.cafepos.pricing.LoyaltyPercentDiscount;
-import com.cafepos.checkout.ReceiptPrinter;
 import com.cafepos.command.AddItemCommand;
 import com.cafepos.command.OrderService;
 import com.cafepos.command.PayOrderCommand;
@@ -132,31 +127,11 @@ public final class Week8Demo_Commands {
             }
 
             // === PAYMENT SECTION (after user chooses Pay) ===
-            // Ask for loyalty/discount code BEFORE payment
-            System.out.println("\nDo you have a discount or loyalty code? (e.g. LOYAL5) Enter code or NONE:");
-            String loyaltyCode = scanner.nextLine().trim();
-            if (loyaltyCode.isEmpty() || loyaltyCode.equalsIgnoreCase("NONE")) {
-                loyaltyCode = "";
-            }
-            int loyaltyPercent = extractLoyaltyPercent(loyaltyCode);
-
             int taxRate = 10;
-            var pricing = new PricingService(
-                    new LoyaltyPercentDiscount(loyaltyPercent),
-                    new FixedRateTaxPolicy(taxRate)
-            );
-            var printer = new ReceiptPrinter();
-            var checkout = new CheckoutService(factory, pricing, printer, taxRate);
 
             // Order summary (current items)
             System.out.println("\nOrder summary:");
             printOrder(order);
-
-            // Optional preview from last added code (kept from your demo)
-            // Note: this preview is per product; final payment covers the whole order via OrderService.
-            // If you want a full-order receipt preview, we can swap this later.
-            // String previewReceipt = checkout.checkout(code, 1);
-            // printSummaryFromReceipt(previewReceipt);
 
             // Payment options
             System.out.println("\nHow would you like to pay?");
@@ -194,11 +169,6 @@ public final class Week8Demo_Commands {
             remote.press(2);
             System.out.println("Payment complete. Thank you for your order!");
 
-            // (Optional) print a receipt stub using your checkout service for the last product
-            // String newReceipt = checkout.checkout(code, 1);
-            // System.out.println("\n--- Receipt ---");
-            // System.out.println(newReceipt);
-
             running = false; // Single demo proof; remove if you want another order session
         }
     }
@@ -225,31 +195,7 @@ public final class Week8Demo_Commands {
         }
     }
 
-    private static void printSummaryFromReceipt(String receiptText) {
-        System.out.println("\n--- Pricing Breakdown ---");
-        String[] lines = receiptText.split("\n");
-        for (String line : lines) {
-            if (line.contains("Subtotal") ||
-                line.contains("Discount") ||
-                line.contains("Tax") ||
-                line.contains("Total")) {
-                System.out.println(line);
-            }
-        }
-    }
-
-    private static int extractLoyaltyPercent(String loyaltyCode) {
-        if (loyaltyCode == null || loyaltyCode.isEmpty()) return 0;
-        String code = loyaltyCode.trim().toUpperCase();
-        if (code.startsWith("LOYAL")) {
-            try {
-                return Integer.parseInt(code.substring(5));
-            } catch (NumberFormatException ignored) {}
-        }
-        return 0;
-    }
-
-    // Small input helpers so bad input doesn’t crash the demo
+    // Small input helpers so bad input doesn't crash the demo
     private static int safeInt(Scanner s) {
         while (!s.hasNextInt()) {
             System.out.print("Please enter a number: ");

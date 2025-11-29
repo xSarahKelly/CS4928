@@ -55,6 +55,13 @@ public final class Order {
       }
    }
 
+   public void removeLastItem() {
+      if (!items.isEmpty()) {
+         items.remove(items.size() - 1);
+         notifyObservers(this, "itemRemoved");
+      }
+   }
+
    public void pay(PaymentStrategy strategy) {
       if (strategy == null)
          throw new IllegalArgumentException("strategy required");

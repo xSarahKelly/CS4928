@@ -1,5 +1,4 @@
 package com.cafepos.app.events;
 
-public record OrderPaid(long orderId) implements OrderEvents {
-    
+public record OrderPaid(long orderId) implements OrderEvent {
 }
