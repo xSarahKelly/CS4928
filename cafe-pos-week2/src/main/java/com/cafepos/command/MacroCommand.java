@@ -3,7 +3,7 @@ package com.cafepos.command;
 public final class MacroCommand implements Command {
     private final Command[] steps;
 
-    public MacroCommand(Command[] steps) {
+    public MacroCommand(Command... steps) {
         this.steps = steps;
     }
 
